@@ -43,7 +43,7 @@ sudo su
 vi /var/www/wizard/feature/OpenVPN_status/wizard-run`
 ```
 
-You'll it up top:
+You'll find it up top:
 
 ```
 STATUS_LOG_PATH="/config/openvpn/status.log"
