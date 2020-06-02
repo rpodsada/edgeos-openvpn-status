@@ -1,0 +1,41 @@
+#!/bin/bash
+
+STATUS_LOG_PATH="/config/openvpn/status.log"
+
+ACTION=$1
+
+load () {
+
+    # grab log, remove first 4 lines
+    str=`tail -n +4 "$STATUS_LOG_PATH"`
+
+    # client list - grab everything up to ROUTING TABLE (but not including it)
+    clients=`echo "$str" | sed -n '/ROUTING TABLE/q;p'`
+
+    # routing list - grab everything from ROUTING TABLE to GLOBAL STATS (including delimiter), then remove delimiters too
+    routing=`echo "$str" | sed -n '/^ROUTING TABLE/,/^GLOBAL STATS/p' | sed '1d; $d' | sed '1d'`
+
+    # parse the comma separated values into a json string (trailing , for use in array)
+    clients_json=""
+    while IFS=, read -r name address received sent connected; do
+            clients_json+="{\"name\":\"$name\",\"address\":\"$address\",\"received\":\"$received\",\"sent\":\"$sent\",\"connected\":\"$connected\"},"
+    done <<< "$clients"
+
+    # parse the comma separated values into a json string (trailing , for use in array)
+    routing_json=""
+    while IFS=, read -r vpn_ip name remote_ip last_ref; do
+            routing_json+="{\"vpn_ip\":\"$vpn_ip\",\"name\":\"$name\",\"remote_ip\":\"$remote_ip\",\"last_ref\":\"$last_ref\"},"
+    done <<< "$routing"
+
+    # remove trailing , delimiter
+    clients_json=${clients_json%?};
+    routing_json=${routing_json%?};
+
+    echo  "{\"success\":\"1\",\"data\":{\"clients\":[$clients_json],\"routing\":[$routing_json]},\"readonly\":\"1\"}"    
+}
+
+case "$ACTION" in
+    load)
+        load
+        ;;
+esac
