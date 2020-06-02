@@ -1,0 +1,45 @@
+<div class="instructions">
+    OpenVPN Client Status
+</div>
+<div class="instructions">
+Readonly list. Changes need to be made in CLI / Config Tree.
+</div>
+
+<fieldset name="VPN_Clients" class="primary expanded">
+  <legend>VPN Clients</legend>
+  <div class="addable" data-object="clients" data-objectify="1">
+    <div class="addable-template">
+       <tr>
+           <td><input type="text" disabled class="hostname" name="name" style="border:0;background:transparent;padding:0;font-family:Consolas,sans-serif;font-size:11px;width:100%;"></td>
+           <td><input type="text" disabled class="hostname" name="address" style="border:0;background:transparent;padding:0;font-family:Consolas,sans-serif;font-size:11px;width:100%;"></td>
+           <td><input type="text" disabled class="hostname" name="received" style="border:0;background:transparent;padding:0;font-family:Consolas,sans-serif;font-size:11px;width:100%;"></td>
+           <td><input type="text" disabled class="hostname" name="sent" style="border:0;background:transparent;padding:0;font-family:Consolas,sans-serif;font-size:11px;width:100%;"></td>
+           <td><input type="text" disabled class="hostname" name="connected" style="border:0;background:transparent;padding:0;font-family:Consolas,sans-serif;font-size:11px;width:100%;"></td>
+       </tr>
+    </div>
+    <table class="addable-container">
+        <tr><th>Name</th><th style="width:130px">Address</th><th style="width:80px">Bytes in</th><th style="width:80px">Bytes out</th><th style="width:145px">Connected</th></tr>
+    </table>
+    <button type="button" class="addable-add hidden"></button>
+    <button type="button" class="addable-remove hidden"></button>
+  </div>
+</fieldset>
+
+<fieldset name="VPN_Routes" class="primary expanded">
+  <legend>VPN Routes</legend>
+  <div class="addable" data-object="routing" data-objectify="1">
+    <div class="addable-template">
+       <tr>
+           <td><input type="text" disabled class="hostname" name="name" style="border:0;background:transparent;padding:0;font-family:Consolas,sans-serif;font-size:11px;width:100%;"></td>
+           <td><input type="text" disabled class="hostname" name="vpn_ip" style="border:0;background:transparent;padding:0;font-family:Consolas,sans-serif;font-size:11px;width:100%;"></td>
+           <td><input type="text" disabled class="hostname" name="remote_ip" style="border:0;background:transparent;padding:0;font-family:Consolas,sans-serif;font-size:11px;width:100%;"></td>
+           <td><input type="text" disabled class="hostname" name="last_ref" style="border:0;background:transparent;padding:0;font-family:Consolas,sans-serif;font-size:11px;width:100%;"></td>
+       </tr>
+    </div>
+    <table class="addable-container">
+        <tr><th>Name</th><th style="width:100px">VPN IP</th><th style="width:140px">Remote IP</th><th style="width:145px">Last Refresh</th></tr>
+    </table>
+    <button type="button" class="addable-add hidden"></button>
+    <button type="button" class="addable-remove hidden"></button>
+  </div>
+</fieldset>
