@@ -33,7 +33,7 @@ Then I logged into the router, changed to root, moved the folder, and set permis
 ```
 $ sudo su
 # cp -a /home/ubnt/OpenVPN_status/ /config/wizard/feature/
-# chown -R www-data:vyattacfg /config/wizard/features/OpenVPN_status
+# chown -R www-data:vyattacfg /config/wizard/feature/OpenVPN_status
 ```
 
 ## Updating the path to the log file in the Wizard
@@ -52,7 +52,7 @@ STATUS_LOG_PATH="/config/openvpn/status.log"
 
 ## Verify it works
 
-Login to your router and go to the Wizards area. You should see an OpenVPN status link under the Features area. Clicking on it should bring up a parsed version of the OpenVPN status log with two tables: the list of clients and the routing information below. If this information comes up, you're done!
+Login to your router and go to the Wizards area. You should see an **OpenVPN status** link under the Features area. Clicking on it should bring up a parsed version of the OpenVPN status log with two tables: the list of clients and the routing information below that. If this information comes up, you're done!
 
 # Background: Hacking Feature Wizards
 When I noticed the `+` button beside Features in the Wizards area, I realized the intention was for the community to build their own wizards for the router. Of course my first instinct was to look for a repository of community (or official) wizards I could add. All I could find however were users asking if something like this exists in the Ubiquiti support forums. Apparently there is a beta testing program where some users have gotten acccess to preliminary docs / info on this, but it's not public yet. 
