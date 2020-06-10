@@ -41,7 +41,7 @@ The script is setup by default to look for the status file in `/config/openvpn/s
 
 ```
 sudo su
-vi /config/wizard/feature/OpenVPN_status/wizard-run`
+vi /config/wizard/feature/OpenVPN_status/wizard-run
 ```
 
 You'll find it up top:
