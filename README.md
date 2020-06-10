@@ -17,6 +17,7 @@ set interfaces openvpn vtun0 openvpn-option "--status /config/openvpn/status.log
 commit;save
 exit
 ```
+Note: If you had previously set a `--status` path in your openvpn configuration, remove that old path. 
 
 ## Installing the Wizard
 The next step is to install the Wizard on the router. _Note: In the admin interface there is a `+` button beside the Feature wizards section, but I have not yet figured out what format it expects the files in (zip or individual file uploads did not work for me.) If somebody knows how to package files for this upload, I'd love to know._
