@@ -58,7 +58,7 @@ Login to your router and go to the Wizards area. You should see an **OpenVPN sta
 When I noticed the `+` button beside Features in the Wizards area, I realized the intention was for the community to build their own wizards for the router. Of course my first instinct was to look for a repository of community (or official) wizards I could add. All I could find however were users asking if something like this exists in the Ubiquiti support forums. Apparently there is a beta testing program where some users have gotten acccess to preliminary docs / info on this, but it's not public yet. 
 
 ### Finding Where They Live ###
-The router runs on Debian, this is a web interface. My first instinct was to see if anything lived in the `/var/www` folder, and viola, inside of it was a folder called `wizard` that contained `status` and `feature` sub-folders. I originally built my wizard and placed it under this structure. It worked fine... except when I updated from `1.10.11` to `2.0.8`, my wizard was wiped out. These are system folders and can't be used. I later discovered the `/config/wizard/feature` folder which I know will persist across firmware updates.
+The router runs on Debian and this is a web interface. My first instinct was to see if anything lived in the `/var/www` folder, and viola, inside of it was a folder called `wizard` that contained `status` and `feature` sub-folders. I originally built my wizard and placed it under this structure. It worked fine... except when I updated from `1.10.11` to `2.0.8`, my wizard was wiped out. Looks like these are system folders which are reset on firmware updates/changes and can't be used. I later discovered the `/config/wizard/feature` folder which I know will persist across firmware updates.
 
 ### (Semi) Simple System Based on Conventions ###
 Diving into the `VPN_status` folder to learn how they work, I was surprised to see how simple the structure of a Feature Wizard was. The system is _very much_ designed around convention over configuration. You simply put things where they should be and name them a certain way, and the magic fairies will make the rest work. Systems like this can be easy and quick to set up, but can also be frustrating & limiting if you don't know how the system really works or what the available options are. 
@@ -96,11 +96,8 @@ Whatever you do with it, the script must then return a JSON object in this basic
 {
     success: 1 | 0,
     data: { 
-       key: "value", 
-       key2: [ 
-        { name: "name1", value: "value1" },
-        { name: "name2", value: "value2" } 
-       ],    
+       key: ..., 
+       key2: ...,    
     },
     readonly: 1 | 0
 }
@@ -114,7 +111,76 @@ This is the display template for the interface. I don't know a lot about how Edg
 
 It seems to employ a rudimentary Javascript data-binding system, where a JSON object is used to automatically populate/manipulate the HTML in the template. The HTML must be named/structure a certain way for this to work. You'll note there's no JavaScript in this file or in any of the Wizard folders. The JavaScript that runs this is elsewhere, and I'm guessing it's more core to EdgeOS as a whole and it's probably not meant to be changed.
 
-***TODO: Finish wizard.html write-up...***
+The key things in the template which seem to affect how it runs are:
+
+1. The `div.addable` element contains a `data-object` attribute, and that value must match one of the keys for your `data` property in the JSON response. For example:
+
+```
+<div class="addable" data-object="clients" data-objectify="1">
+```
+
+The `clients` value tells the system to use `data.clients` in the JSON response from `wizard-run`:
+
+```
+{
+    success: 1 | 0,
+    data: { 
+       clients: [
+            { ... },
+            { ... },
+       ],
+       routing: [
+            { ... },
+            { ... },
+       ]
+    },
+    readonly: 1 | 0
+}
+```
+
+2. Inside of this element, is another `div.addable-template` element. The HTML inside of this element seems to be the template for rendering each record returned in the specified key in the JSON object (styles removed for clarity):
+
+```
+<div class="addable-template">
+   <tr>
+       <td><input type="text" disabled class="hostname" name="name" style="..."></td>
+       <td><input type="text" disabled class="hostname" name="address" style="..."></td>
+       <td><input type="text" disabled class="hostname" name="received" style="..."></td>
+       <td><input type="text" disabled class="hostname" name="sent" style="..."></td>
+       <td><input type="text" disabled class="hostname" name="connected" style="..."></td>
+    </tr>
+</div>
+```
+
+The key attribute here is `name`. The value of `name` sets which property in the JSON data object to populate the field with. In this wizard, we send back a data object that looks like this:
+
+```
+...
+    data: { 
+       clients: [
+            { name: "client1", address: "x.x.x.x", received: "12345", sent: "12345", connected: "date"  },
+            { name: "client2", address: "x.x.x.x", received: "12345", sent: "12345", connected: "date"  }           
+       ],
+...
+}
+```
+
+If the `name` attribute matches the name of the property in the JSON response object, the system will automatically set the text field to that value.
+
+3. The `table.addable-container` element is where the rows are rendered using the template above. In our wizard.html, this element looks like so:
+
+```
+<table class="addable-container">
+        <tr><th>Name</th><th style="width:130px">Address</th><th style="width:80px">Bytes in</th><th style="width:80px">Bytes out</th><th style="width:145px">Connected</th></tr>
+</table>
+```
+It keeps the header row and appends the rows using the template below it (e.g. like jQuery's `append()` method.)
+
+That's the basic structure of wizard.html. I have not extensively experimented with it, but I believe you can change from a `<table>` element to others using the same structure. The class names dictate what's what. 
+
+One thing I have not figured out, however, is how to get the system to render data into elements other than an `input` field with a `name` attribute. In my wizard I simply added some styles to make it look less like an input element, but there may be some mobile/usability issues with doing this.
+
+Of course, if you're part of the beta program maybe there's a whole document about all of this and I'm wasting my time, but this is what I've discovered, and I hope it helps others.
 
 ## Wishlist/TODOS
 
