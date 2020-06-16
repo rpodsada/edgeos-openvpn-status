@@ -86,7 +86,7 @@ The `wizard.html` file is the view/template for the wizard. It takes input and d
 `wizard-run` takes two command-line input parameters:
 
 - `$1` is the command/action the wizard should perform. This is a string, and the first command a wizard gets from EdgeOS seems to be `load`, which asks it to load any initial information required to be displayed.
-- `$2` is any info submitted from the wizard by the user (via form submission). This is not used during the initial `load` command. Only wizards that take input use this. Since mine doesn't and  We won't and I haven't played with this, so I won't discuss it here. (But looking at other wizards, and given the pattern across EdgeOS, I believe this parameter will receive a JSON object representing the form submission, which you'd use `jq` to parse. The `DNS_host_names` wizard seems to follow this pattern.)
+- `$2` is any info submitted from the wizard by the user (via form submission). This is not used during the initial `load` command. Only wizards that take input use this. Since this wizard doesn't and I haven't played with this functionality, I won't comment on it here. (But looking at other wizards, and given the pattern across EdgeOS, I believe this parameter will receive a JSON object representing the form submission, which you'd use `jq` to parse. The `DNS_host_names` wizard seems to follow this pattern.)
 
 Beyond this, it's nothing more than a regular bash script. You can run any available bash commands on the system, use tools like `sed`, `grep`, `awk`, etc. You can also use some API functions exposed via the command-line by EdgeOS / Vyatta. 
 
