@@ -34,7 +34,9 @@ Then I logged into the router, changed to root, moved the folder, and set permis
 $ sudo su
 # cp -a /home/ubnt/OpenVPN_status/ /config/wizard/feature/
 # chown -R www-data:vyattacfg /config/wizard/feature/OpenVPN_status
+# chmod +x /config/wizard/feature/OpenVPN_status/wizard-run
 ```
+(Thanks to [@r2munz](https://github.com/r2munz) for reminding me about the `chmod +x` ;)
 
 ## Updating the path to the log file in the Wizard
 The script is setup by default to look for the status file in `/config/openvpn/status.log`. If your path is different,  edit the `wizard-run` script and change the `STATUS_LOG_PATH`:
